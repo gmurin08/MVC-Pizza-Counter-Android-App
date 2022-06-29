@@ -29,34 +29,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void calculateClick(View view) {
-        String numAttendStr = mNumAttendEditText.getText().toString();
-
-        //Logic for determining how many slices of pizza per person
+        // Get how many are attending the party
         int numAttend;
-
         try {
-            numAttend=Integer.parseInt(numAttendStr);
-        } catch (NumberFormatException ex){
-            numAttend=0;
-            Log.v(TAG, "No number entered");
+            String numAttendStr = mNumAttendEditText.getText().toString();
+            numAttend = Integer.parseInt(numAttendStr);
         }
-        int slicesPerPerson = 0;
-        int checkedId = mHowHungryRadioGroup.getCheckedRadioButtonId();
+        catch (NumberFormatException ex) {
+            numAttend = 0;
+        }
 
-        if(checkedId == R.id.lightRadioButton){
-            slicesPerPerson = 2;
+        // Get hunger level selection
+        int checkedId = mHowHungryRadioGroup.getCheckedRadioButtonId();
+        PizzaCalculator.HungerLevel hungerLevel = PizzaCalculator.HungerLevel.RAVENOUS;
+        if (checkedId == R.id.lightRadioButton) {
+            hungerLevel = PizzaCalculator.HungerLevel.LIGHT;
         }
         else if (checkedId == R.id.mediumRadioButton) {
-            slicesPerPerson = 3;
-        }
-        else if (checkedId == R.id.ravenousRadioButton) {
-            slicesPerPerson = 4;
+            hungerLevel = PizzaCalculator.HungerLevel.MEDIUM;
         }
 
-        //Calculate number of pizzas and display result
-        int totalPizzas = (int) Math.ceil(numAttend * slicesPerPerson /
-                (double) SLICES_PER_PIZZA);
-        mNumPizzasTextView.setText("Total pizzas: " + totalPizzas);
+        // Get the number of pizzas needed
+        PizzaCalculator calc = new PizzaCalculator(numAttend, hungerLevel);
+        int totalPizzas = calc.getTotalPizzas();
 
+        // Place totalPizzas into the string resource and display
+        String totalText = getString(R.string.total_pizzas, totalPizzas);
+        mNumPizzasTextView.setText(totalText);
     }
 }
