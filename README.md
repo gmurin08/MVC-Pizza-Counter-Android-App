@@ -1,2 +1,4 @@
 # Pizza-Counter-Android-App
-Uses a simple view and logic to calculate how many pizzas to order for a group.
+<img src="./screen.png" alt="screen" width="200"/>
+
+Implements an MVC design pattern to calculate the number of pizzas to order for a group of people.
